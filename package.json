@@ -1,0 +1,31 @@
+{
+  "name": "streamingservice",
+  "version": "1.0.0",
+  "description": "These endpoints are for streaming service Mobile app. streaming service App works like a reminder system for setting and sending notification.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "build": "yarn install",
+    "start:dev": "npx nodemon app.js"
+  },
+  "author": "Dat Tech Guy",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.2.4",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.3",
+    "validator": "^13.9.0",
+    "xss-clean": "^0.1.4"
+  },
+  "engines": {
+    "node": ">=14.20.1"
+  }
+}
