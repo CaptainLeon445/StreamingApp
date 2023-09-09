@@ -12,12 +12,13 @@ exports.GetVideos = catchAsyncError(async(req, res, next)=>{
         message: "Success",
         data
     })
-
 })
 exports.UpdateVideo = catchAsyncError(async(req, res, next)=>{
-    const id = req.user.id
+    const videoID = req.params.videoID
     const {} = req.body
     const content = {}
+    const video = await VideoDB.findById(videoID)
+    const id = video.id
     const data = await VideoDB.findByIdAndUpdate(id, req.body, {
         new : true, runValidators : true
     })
@@ -27,7 +28,7 @@ exports.UpdateVideo = catchAsyncError(async(req, res, next)=>{
     })
 })
 exports.deleteVideo = catchAsyncError(async(req, res, next)=>{
-    const data = await VideoDB.findByIdAndDelete(req.params.id)
+    const data = await VideoDB.findByIdAndDelete(req.params.videoID)
     if (!data){
         return next(new AppError("No Video with the id", 400))
     }
@@ -46,7 +47,7 @@ exports.CreateVideo = catchAsyncError(async(req, res, next)=>{
 })
 
 exports.GetVideo = catchAsyncError(async(req, res, next)=>{
-    const data = await VideoDB.findById(req.params.id)
+    const data = await VideoDB.findById(req.params.videoID)
     if (!data){
         return next(new AppError("No Video with the id", 400))
     }
