@@ -1,14 +1,14 @@
 const User = require("../Model/userModel");
 const AppError = require("../utils/appError");
 const catchAsyncError = require("../utils/catchAsyncError");
-const VideoDB = require("../Model/videosModel");
 const likes = require("../Model/likesModel");
 const Comments = require("../Model/commentModel");
 const ratings = require("../Model/ratingsModel");
 const replyComments = require("../Model/replyCommentModel");
+const Videos = require("../Model/videosModel");
 
 exports.GetVideos = catchAsyncError(async(req, res, next)=>{
-    const data =  await VideoDB.find()
+    const data =  await Videos.find()
     res.status(200).json({
         message: "Success",
         data
@@ -18,9 +18,9 @@ exports.UpdateVideo = catchAsyncError(async(req, res, next)=>{
     const videoID = req.params.videoID
     const {} = req.body
     const content = {}
-    const video = await VideoDB.findById(videoID)
+    const video = await Videos.findById(videoID)
     const id = video.id
-    const data = await VideoDB.findByIdAndUpdate(id, req.body, {
+    const data = await Videos.findByIdAndUpdate(id, req.body, {
         new : true, runValidators : true
     })
     return res.status(200).json({
@@ -29,7 +29,7 @@ exports.UpdateVideo = catchAsyncError(async(req, res, next)=>{
     })
 })
 exports.deleteVideo = catchAsyncError(async(req, res, next)=>{
-    const data = await VideoDB.findByIdAndDelete(req.params.videoID)
+    const data = await Videos.findByIdAndDelete(req.params.videoID)
     if (!data){
         return next(new AppError("No Video with the id", 400))
     }
@@ -40,7 +40,7 @@ exports.deleteVideo = catchAsyncError(async(req, res, next)=>{
 })
 exports.CreateVideo = catchAsyncError(async(req, res, next)=>{
     const content = req.body
-    const data = await VideoDB.create(content) 
+    const data = await Videos.create(content) 
     return res.status(201).json({
         mesaage: "success",
         data
@@ -48,7 +48,7 @@ exports.CreateVideo = catchAsyncError(async(req, res, next)=>{
 })
 
 exports.GetVideo = catchAsyncError(async(req, res, next)=>{
-    const data = await VideoDB.findById(req.params.videoID)
+    const data = await Videos.findById(req.params.videoID)
     if (!data){
         return next(new AppError("No Video with the id", 400))
     }
@@ -58,6 +58,33 @@ exports.GetVideo = catchAsyncError(async(req, res, next)=>{
     })
 })
 
+`##################################
+ ###                            ###
+ ###     Create Playlist        ###
+ ###                            ###
+ ##################################`
+
+exports.createPlaylist = catchAsyncError(async(req, res, next)=>{
+    const user = req.user.id
+    const videoID = req.params.videoID
+    const videoData = await Videos.findById(videoID)
+    if (!videoData){
+        return next(new AppError("Video not found"), 404)
+    }
+    const {video} = req.body
+    const data = await replyComments.create({
+        user, videos : videoData.id, video 
+    }) 
+    await Videos.findByIdAndUpdate(videoData.id,{
+        user,  playlist: data.id
+    }, {
+        new : true
+    })
+    return res.status(201).json({
+        mesaage: "Success",
+        data
+    })
+})
 
 `#########################
  ###                   ###
@@ -67,7 +94,7 @@ exports.GetVideo = catchAsyncError(async(req, res, next)=>{
 
 exports.likeVideo = catchAsyncError(async(req, res, next)=>{
     const userId = req.user.id
-    const video = await VideoDB.findById(userId)
+    const video = await Videos.findById(userId)
     const likedVideos = await likes.find({user : userId, video: req.params.videoID})
     if (video){
         return next(new AppError("Video can only be liked by other users"), 400)
@@ -101,7 +128,7 @@ exports.likeVideo = catchAsyncError(async(req, res, next)=>{
 
  exports.commentVideo = catchAsyncError(async(req, res, next)=>{
     const userId = req.user.id
-    const video = await VideoDB.findById(userId)
+    const video = await Videos.findById(userId)
     if (video){
         return next(new AppError("Video can only be commented by other users"), 400)
     }
@@ -157,7 +184,7 @@ exports.deleteComment = catchAsyncError(async(req, res, next)=>{
     const data = await replyComments.create({
         user, comment : comment.id, reply 
     }) 
-    await Comments.findByIdAndUpdate({
+    await Comments.findByIdAndUpdate(comment.id,{
         user, video: req.params.videoID, replies: data.id
     }, {
         new : true
@@ -176,7 +203,7 @@ exports.deleteComment = catchAsyncError(async(req, res, next)=>{
 
  exports.rateVideo = catchAsyncError(async(req, res, next)=>{
     const userId = req.user.id
-    const video = await VideoDB.findById(userId)
+    const video = await Videos.findById(userId)
     if (video){
         return next(new AppError("Video can only be rated by other users"), 400)
     }

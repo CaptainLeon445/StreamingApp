@@ -13,7 +13,10 @@ const videoSchema = mongoose.Schema({
         type:String,
     },
     video: String,
-    playlist: [],
+    playlist: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Playlist",
+    }],
     paid: {
         type : Boolean,
         default : false
