@@ -5,3 +5,5 @@ const Router=express.Router()
 
 Router.route("/").get(GetVideos, CreateVideo)
 Router.route("/:videoID").get(GetVideo, UpdateVideo, deleteVideo)
+
+module.exports = Router;

@@ -5,12 +5,14 @@ const app = require("./middlewares");
 
 const authRoutes = require("./Routes/authRoutes");
 const userRoutes = require("./Routes/userRoutes");
+const videoRoutes = require("./Routes/videoRoutes")
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./utils/globalErrorHandler");
 
 app.use("/v1/api/auth", authRoutes);
 app.use("/v1/api/users", userRoutes);
+app.use("v1/api/videos", videoRoutes);
 
 app.all("*", (req, res, next)=>{
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
