@@ -9,6 +9,10 @@ const likeSchema = mongoose.Schema({
     video : {
         type: mongoose.Schema.ObjectId,
         ref: "Videos"
+    },
+    like : {
+        type: Boolean,
+        default: true
     }
 })
 
