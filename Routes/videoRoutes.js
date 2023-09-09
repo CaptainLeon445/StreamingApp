@@ -11,10 +11,12 @@ const {
   rateVideo,
   replyComments,
 } = require("../Controllers/videoController");
-const Router = express.Router();
+const { authProtect, restrictTo } = require("../Controllers/authConrollers");
 
-Router.route("/").get(GetVideos).post(CreateVideo);
-Router.route("/:videoID").get(GetVideo).patch(UpdateVideo).delete(deleteVideo);
+const Router = express.Router();
+Router.use(authProtect)
+Router.route("/").get(GetVideos).post(restrictTo("admin,customer"),CreateVideo);
+Router.route("/:videoID").get(GetVideo).patch(restrictTo("admin,customer"),UpdateVideo).delete(restrictTo("admin,customer"),deleteVideo);
 Router.route("/:videoID/likes").post(likeVideo);
 Router.route("/:videoID/comment").post(commentVideo).patch(EditComment);
 Router.route("/:videoID/comment/reply").post(replyComments);
