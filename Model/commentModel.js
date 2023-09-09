@@ -10,6 +10,12 @@ const commentSchema = mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: "Videos"
     },
+    replies : [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "replyComments"
+        }
+    ],
     comment : String,
     created_at: {
         type: Date,

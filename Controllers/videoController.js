@@ -5,6 +5,7 @@ const VideoDB = require("../Model/videosModel");
 const likes = require("../Model/likesModel");
 const Comments = require("../Model/commentModel");
 const ratings = require("../Model/ratingsModel");
+const replyComments = require("../Model/replyCommentModel");
 
 exports.GetVideos = catchAsyncError(async(req, res, next)=>{
     const data =  await VideoDB.find()
@@ -141,7 +142,35 @@ exports.deleteComment = catchAsyncError(async(req, res, next)=>{
 
 `##################################
  ###                            ###
- ###     Rate  VIDEOS     ###
+ ###     Reply to Comments      ###
+ ###                            ###
+ ##################################`
+
+ exports.replyComments = catchAsyncError(async(req, res, next)=>{
+    const user = req.user.id
+    const commentId = req.params.commentId
+    const comment = await Comments.findById(commentId)
+    if (!comment){
+        return next(new AppError("Comment not found"), 404)
+    }
+    const {reply} = req.body
+    const data = await replyComments.create({
+        user, comment : comment.id, reply 
+    }) 
+    await Comments.findByIdAndUpdate({
+        user, video: req.params.videoID, replies: data.id
+    }, {
+        new : true
+    })
+    return res.status(201).json({
+        mesaage: "Success",
+        data
+    })
+})
+
+`##################################
+ ###                            ###
+ ###     Rate  VIDEOS           ###
  ###                            ###
  ##################################`
 
