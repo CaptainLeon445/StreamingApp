@@ -87,6 +87,8 @@ exports.login = catchAsyncError(async (req, res, next) => {
   if (!user || !(await user.comparePassword(password, user.password))) {
     return next(new AppError("Email or Password incorrect.", 400));
   }
+
+  
   const token = jwtToken(user._id);
   res.status(200).json({
     message: "success",

@@ -14,7 +14,7 @@ const {
 const { authProtect, restrictTo } = require("../Controllers/authConrollers");
 
 const Router = express.Router();
-// Router.use(authProtect)
+Router.use(authProtect)
 Router.route("/").get(GetVideos).post(CreateVideo);
 Router.route("/:videoID")
   .get(GetVideo)
