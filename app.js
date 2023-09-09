@@ -9,19 +9,21 @@ const videoRoutes = require("./Routes/videoRoutes")
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./utils/globalErrorHandler");
-
+app.get("/", (req, res) => {
+  res.status(200).json({ alive: "True" });
+});
 app.use("/v1/api/auth", authRoutes);
 app.use("/v1/api/users", userRoutes);
-app.use("v1/api/videos", videoRoutes);
+app.use("/v1/api/videos", videoRoutes);
 
 app.all("*", (req, res, next)=>{
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 })
 
 app.use(globalErrorHandler)
-
+module.exports = app;
 let DB = process.env.DATABASE_DEV;
-let port = 8000;
+let port = 3000;
 if (process.env.NODE_ENV === "production") {
   DB = process.env.DATABASE_PROD.replace(
     // "<PASSWORD>",
@@ -53,7 +55,7 @@ mongoose
 const server=app.listen(port, () => {
   console.log(`Server running on port ${port}...🏃`);
 });
-
+module.exports = server;
 process.on("unhandledRejection", (err)=>{
   console.log(err.name,":",err.message)
   console.log("UNHANDLED REJECTION 💥 Shutting down...")

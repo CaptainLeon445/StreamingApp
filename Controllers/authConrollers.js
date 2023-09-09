@@ -7,7 +7,6 @@ const sendEmail = require("../utils/sendEmail");
 const mongoose = require("mongoose");
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/appError");
-const { generateTimeSlots } = require("../utils/timeSlots");
 
 const filterObj = (obj, ...includeFields) => {
   const newObj = {};
@@ -71,7 +70,6 @@ exports.signUp = catchAsyncError(async (req, res) => {
   const data = req.body;
   const newUser = await User.create(data);
   const token = jwtToken(newUser._id);
-  await generateTimeSlots(newUser._id);
   
   res.status(200).json({
     message: "success",

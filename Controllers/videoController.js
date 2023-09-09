@@ -1,4 +1,3 @@
-const User = require("../Model/userModel");
 const AppError = require("../utils/appError");
 const catchAsyncError = require("../utils/catchAsyncError");
 const likes = require("../Model/likesModel");
@@ -58,11 +57,11 @@ exports.GetVideo = catchAsyncError(async(req, res, next)=>{
     })
 })
 
-`##################################
- ###                            ###
- ###     Create Playlist        ###
- ###                            ###
- ##################################`
+// `##################################
+//  ###                            ###
+//  ###     Create Playlist        ###
+//  ###                            ###
+//  ##################################`
 
 exports.createPlaylist = catchAsyncError(async(req, res, next)=>{
     const user = req.user.id
@@ -86,11 +85,11 @@ exports.createPlaylist = catchAsyncError(async(req, res, next)=>{
     })
 })
 
-`#########################
- ###                   ###
- ###   "LIKE VIDEOS"   ###
- ###                   ###
- #########################`
+// `#########################
+//  ###                   ###
+//  ###   "LIKE VIDEOS"   ###
+//  ###                   ###
+//  #########################`
 
 exports.likeVideo = catchAsyncError(async(req, res, next)=>{
     const userId = req.user.id
@@ -120,11 +119,11 @@ exports.likeVideo = catchAsyncError(async(req, res, next)=>{
     })
 })
 
-`##################################
- ###                            ###
- ###     Comment on  VIDEOS     ###
- ###                            ###
- ##################################`
+// `##################################
+//  ###                            ###
+//  ###     Comment on  VIDEOS     ###
+//  ###                            ###
+//  ##################################`
 
  exports.commentVideo = catchAsyncError(async(req, res, next)=>{
     const userId = req.user.id
@@ -167,11 +166,11 @@ exports.deleteComment = catchAsyncError(async(req, res, next)=>{
     })
 })
 
-`##################################
- ###                            ###
- ###     Reply to Comments      ###
- ###                            ###
- ##################################`
+// `##################################
+//  ###                            ###
+//  ###     Reply to Comments      ###
+//  ###                            ###
+//  ##################################`
 
  exports.replyComments = catchAsyncError(async(req, res, next)=>{
     const user = req.user.id
@@ -195,11 +194,11 @@ exports.deleteComment = catchAsyncError(async(req, res, next)=>{
     })
 })
 
-`##################################
- ###                            ###
- ###     Rate  VIDEOS           ###
- ###                            ###
- ##################################`
+// `##################################
+//  ###                            ###
+//  ###     Rate  VIDEOS           ###
+//  ###                            ###
+//  ##################################`
 
  exports.rateVideo = catchAsyncError(async(req, res, next)=>{
     const userId = req.user.id
