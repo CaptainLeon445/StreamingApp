@@ -51,7 +51,7 @@ exports.GetVideo = catchAsyncError(async(req, res, next)=>{
     if (!data){
         return next(new AppError("No Video with the id", 400))
     }
-    return res.status(204).json({
+    return res.status(200).json({
         message: "Success",
         data
     })

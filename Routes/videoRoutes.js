@@ -18,8 +18,8 @@ const Router = express.Router();
 Router.route("/").get(GetVideos).post(CreateVideo);
 Router.route("/:videoID")
   .get(GetVideo)
-  .patch(restrictTo("admin,customer"), UpdateVideo)
-  .delete(restrictTo("admin,customer"), deleteVideo);
+  .patch( UpdateVideo)
+  .delete( deleteVideo);
 Router.route("/:videoID/likes").post(likeVideo);
 Router.route("/:videoID/comment").post(commentVideo).patch(EditComment);
 Router.route("/:videoID/comment/reply").post(replyComments);
