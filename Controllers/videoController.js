@@ -67,7 +67,7 @@ exports.GetVideo = catchAsyncError(async(req, res, next)=>{
 exports.likeVideo = catchAsyncError(async(req, res, next)=>{
     const userId = req.user.id
     const video = await VideoDB.findById(userId)
-    const likedVideos = await likes.find({user : userId, video: req.params.videoId})
+    const likedVideos = await likes.find({user : userId, video: req.params.videoID})
     if (video){
         return next(new AppError("Video can only be liked by other users"), 400)
     }
@@ -83,7 +83,7 @@ exports.likeVideo = catchAsyncError(async(req, res, next)=>{
     }
     const content = {
         user: userId ,
-        video: req.params.videoId
+        video: req.params.videoID
     }
     const data = await likes.create(content) 
     return res.status(201).json({
@@ -106,7 +106,7 @@ exports.likeVideo = catchAsyncError(async(req, res, next)=>{
     }
     const content = {
         user: userId ,
-        video: req.params.videoId,
+        video: req.params.videoID,
         comment : req.body.comment
     }
     const data = await Comments.create(content) 
@@ -153,7 +153,7 @@ exports.deleteComment = catchAsyncError(async(req, res, next)=>{
     }
     const content = {
         user: userId ,
-        video: req.params.videoId,
+        video: req.params.videoID,
         rating : req.body.rating
     }
     const data = await ratings.create(content) 
