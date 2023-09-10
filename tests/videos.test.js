@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 const request = require("supertest");
 const app = require("../app");
-const server = require("../app");
 const jwtToken = require("../utils/generateJWToken");
-
+const server=app.listen(3000, () => {
+  console.log(`Server running on port ${3000}...🏃`);
+});
 require("dotenv").config();
 
 describe("API Tests for Videos", () => {

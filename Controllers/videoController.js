@@ -38,6 +38,7 @@ exports.deleteVideo = catchAsyncError(async(req, res, next)=>{
     })
 })
 exports.CreateVideo = catchAsyncError(async(req, res, next)=>{
+    req.body.user = req.user.id
     const content = req.body
     const data = await Videos.create(content) 
     return res.status(201).json({
@@ -125,7 +126,7 @@ exports.likeVideo = catchAsyncError(async(req, res, next)=>{
 //  ###                            ###
 //  ##################################`
 
- exports.commentVideo = catchAsyncError(async(req, res, next)=>{
+exports.commentVideo = catchAsyncError(async(req, res, next)=>{
     const userId = req.user.id
     const video = await Videos.findById(userId)
     if (video){
@@ -142,11 +143,21 @@ exports.likeVideo = catchAsyncError(async(req, res, next)=>{
         data
     })
 })
+
+exports.getComments = catchAsyncError(async(req, res, next)=>{
+    const data = await Comments.find() 
+    return res.status(200).json({
+        mesaage: "Success",
+        results:data.length,
+        data
+    })
+})
+
 exports.EditComment = catchAsyncError(async(req, res, next)=>{
     const userId = req.user.id
     const {comment} = req.body
     const commentId = await Comments.find({user: userId, video:req.params.videoID})
-    const data = await Comments.findByIdAndUpdate(commentId, comment, {
+    const data = await Comments.findByIdAndUpdate(commentId.id, comment, {
         new : true, runValidators : true
     })
     return res.status(200).json({
@@ -155,12 +166,12 @@ exports.EditComment = catchAsyncError(async(req, res, next)=>{
     })
 })
 exports.deleteComment = catchAsyncError(async(req, res, next)=>{
-    const paramsId = req.params.id
+    const paramsId = req.params.videoID
     const data = await Comments.findByIdAndDelete(paramsId)
     if (!data){
         return next(new AppError("No Comment with the id", 400))
     }
-    return res.status(200).json({
+    return res.status(204).json({
         message: "Comment deleted Successfully!",
         data
     })

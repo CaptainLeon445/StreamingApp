@@ -14,7 +14,7 @@ const videoSchema = mongoose.Schema({
     },
     video: String,
     playlist: [{
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref:"Playlist",
     }],
     paid: {

@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 
 const commentSchema = mongoose.Schema({
     user : {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Users"
     },
     video : {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Videos"
     },
     replies : [
