@@ -66,6 +66,17 @@ describe("API Tests for Comments on Videos", () => {
     expect(res.statusCode).toBe(204);
   });
 
+  it("user reply to comment on a video", async () => {
+    token = jwtToken("64fc6c82f274104a1abfbb39");
+    const res = await request(app)
+      .post("/v1/api/videos/64fd9e1e4cf4012b6e3aa742/comment/reply")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        reply: "I agree.",
+      })
+    expect(res.statusCode).toBe(201);
+  });
+
   afterAll((done) => {
     server.close(done);
   });

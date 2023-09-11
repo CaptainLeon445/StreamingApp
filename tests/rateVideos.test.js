@@ -6,7 +6,7 @@ const jwtToken = require("../utils/generateJWToken");
 
 require("dotenv").config();
 
-describe("API Tests for Videos", () => {
+describe("API Tests for Rating Videos", () => {
   beforeAll(async () => {
     // Connect to the test database
     await mongoose.connect(process.env.DATABASE_DEV, {
@@ -26,10 +26,10 @@ describe("API Tests for Videos", () => {
   // });
   let token;
   
-  it("user like a video", async () => {
+  it("user rate a video", async () => {
     token = jwtToken('64fc6c82f274104a1abfbb39')
     const res = await request(app)
-      .post("/v1/api/videos/64fc7534867c4e93a88ef58d/likes")
+      .post("/v1/api/videos/64fc7534867c4e93a88ef58d/rate")
       .set("Authorization", `Bearer ${token}`);
     expect(res.statusCode).toBe(201);
   });

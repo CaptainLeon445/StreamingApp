@@ -13,6 +13,8 @@ const videoSchema = mongoose.Schema({
         type:String,
     },
     video: String,
+    ThumbnailUrl: String,
+    duration: Number,
     playlist: [{
         type: mongoose.Schema.ObjectId,
         ref:"Playlist",
