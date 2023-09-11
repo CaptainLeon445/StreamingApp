@@ -8,12 +8,14 @@ const app=express()
 
 
 if (process.env.NODE_ENV==="development"){
-    app.use(morgan("dev"))
+    app.use(morgan('combined'))
     app.use((req, res, next)=>{
         console.log("Welcome to my Momento Middlware 🧑‍💼")
         next();
     })
 }
+
+
 
 app.use(express.json())
 // Data Sanitization against NoSql Query Injection

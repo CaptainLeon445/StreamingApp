@@ -28,6 +28,6 @@ const videoSchema = mongoose.Schema({
         default: Date.now()
     }
 })
-
+videoSchema.index({user: 1})
 const Videos = mongoose.model("Videos", videoSchema)
 module.exports = Videos;

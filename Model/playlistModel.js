@@ -15,6 +15,7 @@ const PlaylistSchema = mongoose.Schema({
         default: Date.now()
     }
 })
+userSchema.index({user: 1, videos: 1})
 
 const Playlists = mongoose.model("Playlists", PlaylistSchema)
 module.exports = Playlists;

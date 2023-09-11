@@ -6,7 +6,8 @@ const ratings = require("../Model/ratingsModel");
 const replyComments = require("../Model/replyCommentModel");
 const Videos = require("../Model/videosModel");
 const multer = require("multer");
-
+const { logger } = require("../logger");
+const cache = require('memory-cache');
 // `##################################
 //  ###                            ###
 //  ###     videos upload          ###
@@ -17,15 +18,14 @@ exports.upload = multer({ storage: multer.memoryStorage() });
 
 exports.GetVideos = catchAsyncError(async (req, res, next) => {
   const data = await Videos.find();
+  const result = await getDataFromCache("videos", data)
   res.status(200).json({
     message: "Success",
-    data,
+    result,
   });
 });
 exports.UpdateVideo = catchAsyncError(async (req, res, next) => {
   const videoID = req.params.videoID;
-  const {} = req.body;
-  const content = {};
   const video = await Videos.findById(videoID);
   const id = video.id;
   const data = await Videos.findByIdAndUpdate(id, req.body, {
@@ -58,6 +58,7 @@ exports.CreateVideo = catchAsyncError(async (req, res, next) => {
   req.body.video = videoPath;
   const content = req.body;
   const data = await Videos.create(content);
+  logger.info("Request received for creation of video.");
   return res.status(201).json({
     mesaage: "success",
     data,
@@ -69,9 +70,11 @@ exports.GetVideo = catchAsyncError(async (req, res, next) => {
   if (!data) {
     return next(new AppError("No Video with the id", 400));
   }
+  const result = await getDataFromCache("video", data)
+
   return res.status(200).json({
     message: "Success",
-    data,
+    result
   });
 });
 
@@ -81,7 +84,7 @@ exports.GetVideo = catchAsyncError(async (req, res, next) => {
 //  ###                            ###
 //  ##################################`
 const { multiPart, uploadFileToS3 } = require("../fileStorage");
-
+const { getDataFromCache } = require("../caching");
 
 exports.StreamVideo = catchAsyncError(async (req, res, next) => {
   const video = await Videos.findById(req.params.videoID);
@@ -176,7 +179,7 @@ exports.likeVideo = catchAsyncError(async (req, res, next) => {
 
 exports.commentVideo = catchAsyncError(async (req, res, next) => {
   const userId = req.user.id;
-  const video = await Videos.findById(userId);
+  const video = await Videos.findById({user:userId});
   if (video) {
     return next(
       new AppError("Video can only be commented by other users"),
@@ -197,10 +200,12 @@ exports.commentVideo = catchAsyncError(async (req, res, next) => {
 
 exports.getComments = catchAsyncError(async (req, res, next) => {
   const data = await Comments.find();
+  const result = await getDataFromCache("comments", data)
+
   return res.status(200).json({
     mesaage: "Success",
-    results: data.length,
-    data,
+    results: result.length,
+    result,
   });
 });
 

@@ -12,6 +12,7 @@ const ratingSchema = mongoose.Schema({
         ref: "Videos"
     }
 })
+ratingSchema.index({user: 1, video: 1})
 
 const ratings = mongoose.model("ratings", ratingSchema)
 module.exports = ratings;
